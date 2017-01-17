@@ -1,0 +1,54 @@
+.b-InputForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.b-InputForm__user {
+    font-size: 1em;
+
+    flex: 1 1 auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: solid 1px #999;
+    border-radius: 1px;
+}
+
+.b-InputForm__user:focus {
+    border-color: #007fd1;
+    outline-color: #007fd1;
+}
+
+.b-InputForm__user[disabled] {
+    color: #bbb;
+
+    background-image: repeating-linear-gradient(-45deg, #fff, #fff 25px, #eee 25px, #eee 50px);
+    animation: loading .5s linear infinite;
+    background-size: 150% 100%;
+}
+
+.b-InputForm__submit {
+    font-size: .85em;
+    flex: 0 0 auto;
+    margin-left: .5em;
+    padding: .3em 1.1em;
+
+    color: #f0f0f0;
+    background: linear-gradient(to bottom, #71caed 0%, #007fd1 100%);
+    border-style: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.b-InputForm__submit:focus {
+    outline-color: #007fd1;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: -70px 0px;
+    }
+}

@@ -1,0 +1,17 @@
+.b-RepoList {
+    background-color: #ccc58a;
+}
+
+.b-RepoList__header {
+    text-align: center;
+    margin: 0 0 15px;
+}
+
+.b-RepoList__item {
+    margin: 0 auto .3em;
+    padding: 5px 10px;
+}
+
+.b-RepoList__link {
+    color: #444;
+}
