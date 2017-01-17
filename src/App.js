@@ -3,27 +3,36 @@ import Throbber from './Throbber';
 import InputForm from './InputForm';
 import RepoList from './RepoList';
 import ErrorMsg from './ErrorMsg';
+import Accessibility from './Accessibility';
 import request from 'superagent';
 import './App.css';
 
 class App extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             isRequestPending: false,
             user: '',
             repos: null,
-            errorMessage: null
+            errorMessage: null,
+            accMode: 'normal'
         };
 
         this.onGithubSearch = this.onGithubSearch.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
         this.processResponse = this.processResponse.bind(this);
+        this.updateAccessibilityMode = this.updateAccessibilityMode.bind(this);
     }
 
     onInputChange(e) {
         this.setState({user: e.target.value.trim().replace(/\s/g, '')});
+    }
+
+    updateAccessibilityMode(accMode) {
+        this.setState({
+            accMode
+        })
     }
 
     processResponse(err, res) {
@@ -42,7 +51,7 @@ class App extends Component {
             });
         }
 
-        let repos = res.body.map(item => ({
+        const repos = res.body.map(item => ({
             name: item.name,
             url: item.html_url
         }));
@@ -76,8 +85,11 @@ class App extends Component {
     }
 
     render() {
+        const appClassName = 'b-App ' + (this.state.accMode === 'large' ? 'b-App--large' : '');
         return (
-            <div className="b-App">
+            <div className={appClassName}>
+                <Accessibility mode={this.state.accMode}
+                               onUpdate={this.updateAccessibilityMode}/>
                 <div className="b-App__header">
                     <div className="b-App__title">Search GitHub:</div>
                 </div>
@@ -92,7 +104,7 @@ class App extends Component {
                         <Throbber /> :
                         (this.state.errorMessage ?
                             <ErrorMsg message={this.state.errorMessage.text}
-                                      type={this.state.errorMessage.type} /> :
+                                      status={this.state.errorMessage.status} /> :
                             <RepoList items={this.state.repos} />)}
                 </div>
             </div>

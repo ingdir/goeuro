@@ -2,7 +2,11 @@
   "name": "goeuro",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://ingdir.github.io/goeuro",
   "devDependencies": {
+    "enzyme": "^2.7.0",
+    "gh-pages": "^0.12.0",
+    "react-addons-test-utils": "^15.4.2",
     "react-scripts": "0.8.5"
   },
   "dependencies": {
@@ -14,6 +18,6 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "deploy": "npm run build && gh-pages -d build"
   }
 }

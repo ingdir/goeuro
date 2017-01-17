@@ -1,10 +1,20 @@
 .b-App {
+    font-size: 1em;
     width: 35vw;
-    margin: 1em auto 0;
+    min-width: 300px;
+    max-width: 700px;
+    margin: 50px auto 0;
     border-radius: 2px;
 
     background-color: #fff;
     box-shadow: rgba(0, 10, 10, .5) 0 8px 10px -4px;
+}
+
+.b-App--large {
+    font-size: 1.5em;
+    width: 50vw;
+    min-width: 450px;
+    max-width: 1000px;
 }
 
 .b-App__header,
@@ -21,4 +31,24 @@
 
 .b-App__result {
     padding-bottom: 20px;
+}
+
+/* typical approach would be mobile-first but here most of the code
+   is well tailored for a mobile device anyway, so I add small customizations
+   instead.
+*/
+@media all and (max-width: 768px) {
+    .b-App {
+        width: 100%;
+    }
+
+    .b-App__header,
+    .b-App__search,
+    .b-App__result {
+        padding: 10px 10px 0;
+    }
+
+    .b-App__result {
+        padding-bottom: 10px;
+    }
 }

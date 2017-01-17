@@ -31,8 +31,10 @@ class InputForm extends Component {
                        type="text"
                        disabled={this.props.isDisabled}
                        value={this.props.value}
+                       aria-required="true"
+                       aria-label="Input a Github username to list its repos"
                        onChange={this.onChange} />
-                <button className="b-InputForm__submit">FIND</button>
+                <button type="submit" className="b-InputForm__submit">FIND</button>
             </form>
         );
     }

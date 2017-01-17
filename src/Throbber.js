@@ -4,9 +4,7 @@ import './Throbber.css';
 class Throbber extends Component {
     render() {
         return (
-            <div className="b-Throbber">
-                searching...
-            </div>
+            <div className="b-Throbber">searching...</div>
         );
     }
 }
