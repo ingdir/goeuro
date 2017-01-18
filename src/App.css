@@ -40,6 +40,7 @@
 @media all and (max-width: 768px) {
     .b-App {
         width: 100%;
+        min-width: 0;
     }
 
     .b-App__header,
