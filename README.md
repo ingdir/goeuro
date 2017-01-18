@@ -13,6 +13,10 @@ App needs to handle the following responses correctly:
   - Github user has no repos
   - Github API does not respond
 
+## See It in Production
+
+Visit [https://ingdir.github.io/goeuro](https://ingdir.github.io/goeuro/) to see how the app works.
+
 ## Notes on Implementation
 
 I used [Create React App](https://github.com/facebookincubator/create-react-app) to bootstrap this app initially.
