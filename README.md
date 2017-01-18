@@ -13,7 +13,7 @@ App needs to handle the following responses correctly:
   - Github user has no repos
   - Github API does not respond
 
-## On implementation
+## Notes on Implementation
 
 I used [Create React App](https://github.com/facebookincubator/create-react-app) to bootstrap this app initially.
 The app logic was then implemented with React. To stay practical, I didn't introduce any specific state management tools
@@ -49,4 +49,4 @@ Builds the app for production to the `build` folder.
 
 ### `npm run deploy`
 
-Deploys the app for production to [ingdir.github.io/goeuro]()https://ingdir.github.io/goeuro/).
+Deploys the app for production to [ingdir.github.io/goeuro](https://ingdir.github.io/goeuro/).
