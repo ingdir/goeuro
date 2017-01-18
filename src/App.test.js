@@ -76,16 +76,9 @@ describe('App', () => {
             });
 
             let fixture = {
-                body: [
-                    {
-                        name: 'abc',
-                        html_url: 'http://github.com/xxx/abc'
-                    },
-                    {
-                        name: 'def',
-                        html_url: 'http://github.com/xxx/def'
-                    },
-                ]
+                body: {
+                    message: 'Custom error msg'
+                }
             };
 
             let err = {
@@ -104,7 +97,7 @@ describe('App', () => {
             expect(appInstance.state.user).toEqual('');
             expect(appInstance.state.errorMessage).toEqual({
                 status: err.status,
-                text: err.message
+                text: fixture.body.message
             });
         });
 
@@ -136,6 +129,49 @@ describe('App', () => {
 
             expect(request.get).toHaveBeenCalledWith('https://api.github.com/users/bla/repos');
             expect(appInstance.state.repos.length).toEqual(fixture.body.length);
+            expect(appInstance.state.user).toEqual('bla');
+            expect(appInstance.state.errorMessage).toEqual(null);
+        });
+
+        it('responds to api data with pagination', () => {
+            var appInstance = app.instance();
+            appInstance.setState({
+                user: 'bla',
+                isRequestPending: false
+            });
+
+            let fixture = {
+                body: [
+                    {
+                        name: 'abc',
+                        html_url: 'http://github.com/xxx/abc'
+                    },
+                    {
+                        name: 'def',
+                        html_url: 'http://github.com/xxx/def'
+                    },
+                ],
+                links: {
+                    next: 'http://github.com/next'
+                }
+            };
+
+            request.get = jest.fn()
+                .mockReturnValueOnce({
+                    end: (fn) => fn(null, fixture)
+                })
+                .mockReturnValue({
+                    end: (fn) => fn(null, Object.assign({}, fixture, {
+                        links: {}
+                    }))
+                });
+
+            appInstance.onGithubSearch();
+
+            expect(request.get).toHaveBeenCalledTimes(2);
+            expect(request.get).toHaveBeenCalledWith('https://api.github.com/users/bla/repos');
+            expect(request.get).toHaveBeenCalledWith('http://github.com/next');
+            expect(appInstance.state.repos.length).toEqual(fixture.body.length * 2);
             expect(appInstance.state.user).toEqual('bla');
             expect(appInstance.state.errorMessage).toEqual(null);
         });

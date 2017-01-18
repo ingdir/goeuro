@@ -21,7 +21,11 @@ Visit [https://ingdir.github.io/goeuro](https://ingdir.github.io/goeuro/) to see
 
 I used [Create React App](https://github.com/facebookincubator/create-react-app) to bootstrap this app initially.
 The app logic was then implemented with React. To stay practical, I didn't introduce any specific state management tools
-like [Redux](https://github.com/reactjs/redux) as the main `<App />` only needs to handle a handful of values and one call.
+like [Redux](https://github.com/reactjs/redux) as the main `<App />` only needs to handle several values and one call.
+
+The implementation handles Github API pagination correctly, but uses non-authenticated calls that are severely rate-limited. This may result
+in API 403 Forbidden errors if more than 60 requests per hour are sent,
+according to the Github API docs.
 
 Tests are written with [Jest](https://facebook.github.io/jest/) and are based on the shallow rendering principle.
 

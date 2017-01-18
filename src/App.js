@@ -37,7 +37,6 @@ class App extends Component {
     }
 
     processResponse(res) {
-        console.log('res', res);
         const repos = res.map(item => ({
             name: item.name,
             url: item.html_url
@@ -50,15 +49,14 @@ class App extends Component {
         });
     }
 
-    requestError(err) {
-        console.log(err);
+    requestError(err, res) {
         this.setState({
             isRequestPending: false,
             repos: null,
             user: '',
             errorMessage: {
                 status: err.status,
-                text: err.message
+                text: res.body.message || err.message
             }
         });
     }
@@ -80,26 +78,33 @@ class App extends Component {
             });
         }
 
-        function fetchData() {
+        function fetchData(cb) {
             function fetchPart(repos, url) {
-                return request.get(url)
-                    .then(function(response) {
-                        repos = repos.concat(response.body);
-
-                        if (response.links.next) {
-                            return fetchPart(repos, response.links.next);
-                        } else {
-                            return repos;
+                request.get(url)
+                    .end(function(err, response) {
+                        if (err) {
+                            return cb(err, response);
                         }
+
+                        repos = repos.concat(response.body);
+                        if (response.links && response.links.next) {
+                            return fetchPart(repos, response.links.next);
+                        }
+
+                        cb(null, repos);
                     });
             }
 
-            return fetchPart([], `https://api.github.com/users/${encodeURIComponent(user)}/repos`);
+            fetchPart([], `https://api.github.com/users/${encodeURIComponent(user)}/repos`);
         }
 
-        fetchData()
-            .then(this.processResponse)
-            .catch(this.requestError);
+        fetchData((err, res) => {
+            if (err) {
+                this.requestError(err, res);
+            } else {
+                this.processResponse(res);
+            }
+        });
     }
 
     render() {
