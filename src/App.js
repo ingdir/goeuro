@@ -22,6 +22,7 @@ class App extends Component {
         this.onGithubSearch = this.onGithubSearch.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
         this.processResponse = this.processResponse.bind(this);
+        this.requestError = this.requestError.bind(this);
         this.updateAccessibilityMode = this.updateAccessibilityMode.bind(this);
     }
 
@@ -35,30 +36,30 @@ class App extends Component {
         })
     }
 
-    processResponse(err, res) {
-        this.setState({
-            isRequestPending: false
-        });
-
-        if (err) {
-            return this.setState({
-                repos: null,
-                user: '',
-                errorMessage: {
-                    status: err.status,
-                    text: err.message
-                }
-            });
-        }
-
-        const repos = res.body.map(item => ({
+    processResponse(res) {
+        console.log('res', res);
+        const repos = res.map(item => ({
             name: item.name,
             url: item.html_url
         }));
 
         this.setState({
             repos,
-            errorMessage: null
+            errorMessage: null,
+            isRequestPending: false
+        });
+    }
+
+    requestError(err) {
+        console.log(err);
+        this.setState({
+            isRequestPending: false,
+            repos: null,
+            user: '',
+            errorMessage: {
+                status: err.status,
+                text: err.message
+            }
         });
     }
 
@@ -79,9 +80,26 @@ class App extends Component {
             });
         }
 
-        request
-            .get(`https://api.github.com/users/${encodeURIComponent(user)}/repos`)
-            .end(this.processResponse);
+        function fetchData() {
+            function fetchPart(repos, url) {
+                return request.get(url)
+                    .then(function(response) {
+                        repos = repos.concat(response.body);
+
+                        if (response.links.next) {
+                            return fetchPart(repos, response.links.next);
+                        } else {
+                            return repos;
+                        }
+                    });
+            }
+
+            return fetchPart([], `https://api.github.com/users/${encodeURIComponent(user)}/repos`);
+        }
+
+        fetchData()
+            .then(this.processResponse)
+            .catch(this.requestError);
     }
 
     render() {
