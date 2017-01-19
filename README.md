@@ -34,6 +34,16 @@ at the top right corner) as well as very basic [ARIA attributes](https://www.w3.
  
 The CSS code for the project is implemented according to the [BEM methodology](http://getbem.com).
 
+## Ideas on Further Iterations
+
+This is an example app, lean and simple, but if it had to grow further, I'd focus on these areas first:
+
+  * Improve folder structure, providing a separate folder for each component's assets;
+  * Use Github API authentication (optionally) to avoid rate limiting;
+  * Add snapshot tests to cover more edge cases;
+  * Introduce state management solutions (Redux etc.);
+  * Use a CSS preprocessor like LESS or SASS.
+
 ## Available Actions
 
 In the project directory, run:
