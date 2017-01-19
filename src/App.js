@@ -5,6 +5,7 @@ import RepoList from './RepoList';
 import ErrorMsg from './ErrorMsg';
 import Accessibility from './Accessibility';
 import request from 'superagent';
+import classNames from 'classnames';
 import './App.css';
 
 class App extends Component {
@@ -22,7 +23,7 @@ class App extends Component {
         this.onGithubSearch = this.onGithubSearch.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
         this.processResponse = this.processResponse.bind(this);
-        this.requestError = this.requestError.bind(this);
+        this.processError = this.processError.bind(this);
         this.updateAccessibilityMode = this.updateAccessibilityMode.bind(this);
     }
 
@@ -49,7 +50,7 @@ class App extends Component {
         });
     }
 
-    requestError(err, res) {
+    processError(err, res) {
         this.setState({
             isRequestPending: false,
             repos: null,
@@ -80,6 +81,8 @@ class App extends Component {
 
         function fetchData(cb) {
             function fetchPart(repos, url) {
+                // I use the callback interface, i.e. `.end()`, as the promise-based `superagent` api
+                // does not provide access to the error response body
                 request.get(url)
                     .end(function(err, response) {
                         if (err) {
@@ -100,7 +103,7 @@ class App extends Component {
 
         fetchData((err, res) => {
             if (err) {
-                this.requestError(err, res);
+                this.processError(err, res);
             } else {
                 this.processResponse(res);
             }
@@ -108,7 +111,10 @@ class App extends Component {
     }
 
     render() {
-        const appClassName = 'b-App ' + (this.state.accMode === 'large' ? 'b-App--large' : '');
+        const appClassName = classNames('b-App', {
+            'b-App--large': this.state.accMode === 'large'
+        });
+
         return (
             <div className={appClassName}>
                 <Accessibility mode={this.state.accMode}
